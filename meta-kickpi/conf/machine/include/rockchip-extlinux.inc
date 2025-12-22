@@ -21,4 +21,4 @@ UBOOT_EXTLINUX_KERNEL_IMAGE ?= "/boot/${@ 'fitImage' if bb.utils.to_boolean(d.ge
 UBOOT_EXTLINUX_LABELS ?= "default"
 UBOOT_EXTLINUX_MENU_DESCRIPTION:default ?= "${MACHINE}"
 
-MACHINE_ESSENTIAL_EXTRA_RDEPENDS += "u-boot-extlinux"
+#MACHINE_ESSENTIAL_EXTRA_RDEPENDS += "u-boot-extlinux"

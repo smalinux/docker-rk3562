@@ -1,6 +1,5 @@
 SOC_FAMILY = "rk3562"
 
-// SMA: Duble check
 DEFAULTTUNE ?= "cortexa55"
 
 ROCKCHIP_CLOSED_TPL ?= "1"
@@ -18,6 +17,7 @@ PREFERRED_PROVIDER_optee-os = "rockchip-rkbin-optee-os"
 
 UBOOT_SUFFIX ?= "itb"
 UBOOT_ENTRYPOINT ?= "0x06000000"
+UBOOT_MACHINE = "rk3562_defconfig"
 
 TFA_PLATFORM = "rk3562"
 TFA_BUILD_TARGET = "bl31"
