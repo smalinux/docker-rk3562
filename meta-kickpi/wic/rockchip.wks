@@ -18,7 +18,6 @@
 #   atf         24576           8192        (trusted OS e.g. ATF, OP-TEE, etc)
 #   root        32768           -
 
-part loader1   --offset 64s    --fixed-size 3552K --fstype=none --part-name loader1   --source rawcopy --sourceparams="file=${SPL_BINARY}"
 part v_storage --offset 7168s  --fixed-size 256K  --fstype=none --part-name v_storage
 part reserved  --offset 7680s  --fixed-size 192K  --fstype=none --part-name reserved
 part reserved1 --offset 8064s  --fixed-size 32K   --fstype=none --part-name reserved1

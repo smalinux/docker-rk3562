@@ -4,7 +4,7 @@ require conf/machine/include/rockchip-extlinux.inc
 require conf/machine/include/rockchip-rk-u-boot-env.inc
 require conf/machine/include/rockchip-rauc.inc
 
-SPL_BINARY ?= "idbloader.img"
+#SPL_BINARY ?= "idbloader.img"
 
 # if you use the following variable, make sure to add the '.' e.g.
 # WIC_COMPRESSION_EXTENSION = ".xz"
@@ -25,6 +25,5 @@ RK_UBOOT_ENV:rk-u-boot-env = "${@ '--source rawcopy --sourceparams=file=u-boot.e
 WICVARS:append = " \
 	RK_UBOOT_ENV \
 	ROOT_DPS \
-	SPL_BINARY \
 	UBOOT_SUFFIX \
 	"

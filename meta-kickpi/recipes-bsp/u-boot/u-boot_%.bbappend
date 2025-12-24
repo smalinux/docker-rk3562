@@ -2,11 +2,25 @@ require u-boot-rockchip.inc
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+# Use Rockchip's U-Boot fork instead of mainline
+SRC_URI = "git://github.com/rockchip-linux/u-boot.git;protocol=https;branch=next-dev"
 SRC_URI:append:rk-u-boot-env = " file://rockchip-enable-environment-mmc.cfg"
+SRCREV = "b14196eade471bbc000c368f8555f2a2a1ecc17d"
+LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
+
+PV = "rockchip+git${SRCPV}"
 
 DEPENDS:append:rk3308 = " u-boot-tools-native"
 DEPENDS:append:rock-pi-4 = " gnutls-native"
 DEPENDS:append:rk-u-boot-env = " u-boot-mkenvimage-native"
+
+
+# Disable -Werror to avoid compilation errors with newer GCC
+EXTRA_OEMAKE += "KCFLAGS='-Wno-error'"
+
+# Rockchip U-Boot produces u-boot.bin, not u-boot.itb
+UBOOT_SUFFIX = "bin"
+UBOOT_BINARY = "u-boot.${UBOOT_SUFFIX}"
 
 do_compile:append:rock2-square () {
 	# copy to default search path

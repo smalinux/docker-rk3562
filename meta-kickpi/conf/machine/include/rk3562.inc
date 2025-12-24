@@ -12,10 +12,10 @@ require conf/machine/include/rockchip-wic.inc
 KBUILD_DEFCONFIG ?= "defconfig"
 KERNEL_FEATURES:append:rk3562 = " bsp/rockchip/remove-non-rockchip-arch-arm64.scc"
 
-PREFERRED_PROVIDER_trusted-firmware-a = "rockchip-rkbin-tf-a"
-PREFERRED_PROVIDER_optee-os = "rockchip-rkbin-optee-os"
+#PREFERRED_PROVIDER_trusted-firmware-a = "rockchip-rkbin-tf-a"
+#PREFERRED_PROVIDER_optee-os = "rockchip-rkbin-optee-os"
 
-UBOOT_SUFFIX ?= "itb"
+UBOOT_SUFFIX ?= "bin"
 UBOOT_ENTRYPOINT ?= "0x06000000"
 UBOOT_MACHINE = "rk3562_defconfig"
 
@@ -23,4 +23,11 @@ TFA_PLATFORM = "rk3562"
 TFA_BUILD_TARGET = "bl31"
 
 ENABLE_STATELESS_VPU_GST ?= "1"
+
+SERIAL_CONSOLES = "1500000;ttyS0"
+
+PREFERRED_PROVIDER_trusted-firmware-a = "${@bb.utils.contains('RKBIN_RK3308_LATEST', '1', 'rockchip-rkbin-tf-a', 'rk3308-rkbin', d)}"
+PREFERRED_PROVIDER_rockchip-rkbin-ddr = "${@bb.utils.contains('RKBIN_RK3308_LATEST', '1', 'rockchip-rkbin-ddr', 'rk3308-rkbin', d)}"
+PREFERRED_PROVIDER_rockchip-rkbin-tf-a = "${@bb.utils.contains('RKBIN_RK3308_LATEST', '1', 'rockchip-rkbin-tf-a', 'rk3308-rkbin', d)}"
+PREFERRED_PROVIDER_rockchip-rkbin-optee-os = "${@bb.utils.contains('RKBIN_RK3308_LATEST', '1', 'rockchip-rkbin-optee-os', 'rk3308-rkbin', d)}"
 

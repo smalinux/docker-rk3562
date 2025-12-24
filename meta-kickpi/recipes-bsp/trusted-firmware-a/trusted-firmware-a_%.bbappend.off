@@ -2,6 +2,14 @@
 # toolchain
 DEPENDS:append:rk3399 = " gcc-arm-none-eabi-native"
 
+#
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#
+# kickpi exist as blob, so I don't need to build ATF
+#
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#
+
 COMPATIBLE_MACHINE:append:rk3399 = "|rk3399"
 COMPATIBLE_MACHINE:append:rk3328 = "|rk3328"
 COMPATIBLE_MACHINE:append:px30 = "|px30"
