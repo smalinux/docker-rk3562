@@ -1,0 +1,67 @@
+# Copyright (C) 2019,2020 Garmin Ltd. or its subsidiaries
+# Copyright (C) 2021 Trevor Woerner
+# Released under the MIT license (see COPYING.MIT for the terms)
+#
+# short-description: Create a disk image suitable for booting Rockchip from SD-card
+# long-description: Creates a disk image partitioned using GPT, suitable for Rockchip
+# Disk layout
+# See: https://opensource.rock-chips.com/wiki_Partitions
+#
+#   Partition   Start Sector    Number of Sectors
+#   loader1     64              7104        (idbloader / U-Boot SPL)
+#   v_storage   7168            512         (vendor storage: e.g. serial number, MAC address, etc)
+#   reserved    7680            384         (not used)
+#   reserved1   8064            64          (legacy DRM key)
+#   uboot_env   8128            64          (U-Boot environment)
+#   reserved2   8192            8192        (legacy parameters, ATAGS, etc)
+#   loader2     16384           8192        (U-Boot proper)
+#   atf         24576           8192        (trusted OS e.g. ATF, OP-TEE, etc)
+#   root        32768           -
+
+#part v_storage --offset 7168s  --fixed-size 256K  --fstype=none --part-name v_storage
+#part reserved  --offset 7680s  --fixed-size 192K  --fstype=none --part-name reserved
+#part reserved1 --offset 8064s  --fixed-size 32K   --fstype=none --part-name reserved1
+#part uboot_env --offset 8128s  --fixed-size 32K   --fstype=none --part-name uboot_env ${RK_UBOOT_ENV}
+#part reserved2 --offset 8192s  --fixed-size 4096K --fstype=none --part-name reserved2
+#part loader2   --offset 16384s --fixed-size 4096K --fstype=none --part-name loader2   --source rawcopy --sourceparams="loader=barebox"
+#part atf       --offset 24576s --fixed-size 4096K --fstype=none --part-name atf
+#part /         --label rootfsA --active           --fstype=ext4 --part-name rootfsA   --source rootfs  --part-type ${ROOT_DPS}
+
+
+## part v_storage --offset 7168s  --fixed-size 256K  --fstype=none --part-name v_storage
+## part reserved  --offset 7680s  --fixed-size 192K  --fstype=none --part-name reserved
+## part reserved1 --offset 8064s  --fixed-size 32K   --fstype=none --part-name reserved1
+## #part uboot_env --offset 8128s  --fixed-size 32K   --fstype=none --part-name uboot_env
+## part reserved2 --offset 8192s  --fixed-size 4096K --fstype=none --part-name reserved2
+## part loader2   --offset 16384s --fixed-size 4096K --fstype=none --part-name loader2 --sourceparams="loader=barebox-rk3562-kickpi-k3.img"
+## part atf       --offset 24576s --fixed-size 4096K --fstype=none --part-name atf
+## part /         --label rootfsA --active           --fstype=ext4 --part-name rootfsA   --source rootfs  --part-type ${ROOT_DPS}
+##
+## bootloader --ptable gpt
+
+
+
+### # Rockchip RK3562 partition layout
+### # Bootloader location: sector 64 (32KB offset) - where RK3562 SoC expects it
+### # ATF (BL31) is bundled inside barebox-rk3562-kickpi-k3.img
+###
+### # Bootloader at sector 64 (this is where rkdd writes it: seek=64)
+### part loader2   --offset 64s    --fixed-size 4096K --fstype=none --part-name loader2   --source rawcopy --sourceparams="file=barebox-rk3562-kickpi-k3.img"
+###
+### # Vendor and reserved partitions (adjusted offsets after bootloader)
+### part v_storage --offset 8256s  --fixed-size 256K  --fstype=none --part-name v_storage
+### part reserved  --offset 8768s  --fixed-size 192K  --fstype=none --part-name reserved
+### part reserved1 --offset 9152s  --fixed-size 32K   --fstype=none --part-name reserved1
+### part reserved2 --offset 9216s  --fixed-size 4096K --fstype=none --part-name reserved2
+###
+### # Root filesystem
+### part /         --label rootfsA --active           --fstype=ext4 --part-name rootfsA   --source rootfs
+###
+### bootloader --ptable gpt
+
+
+
+part loader2   --offset 64s    --fixed-size 4096K --fstype=none --part-name loader2   --source rawcopy --sourceparams="file=barebox-rk3562-kickpi-k3.img"
+#part uboot_env --offset 8128s  --fixed-size 32K   --fstype=none --part-name uboot_env
+part /         --label rootfsA --active           --fstype=ext4 --part-name rootfsA   --source rootfs
+bootloader --ptable gpt

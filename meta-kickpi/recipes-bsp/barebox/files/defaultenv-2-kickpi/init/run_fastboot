@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# build/images/barebox.img
+# run on host PC:
+#	$ sudo fastboot flash img build/images/barebox.img
+
+usbgadget -A '/tmp/img(img)c'
+
